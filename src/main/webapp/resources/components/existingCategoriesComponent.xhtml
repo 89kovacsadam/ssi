@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <composite:interface>
+
+    </composite:interface>
+    <composite:implementation>
+        <h:form>
+            <p:messages globalOnly="true"/>
+            <p:panel header="Címkék">
+                <p:dataTable value="#{existingCategories.categories}" var="cat">
+                    <p:column>
+                        <f:facet name="header">
+                            Név
+                        </f:facet>
+                        <h:outputText value="#{cat.name}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Műveletek
+                        </f:facet>
+                        <p:commandButton value="Törlés" onclick="deleteConfirm.show()">
+                            <f:setPropertyActionListener value="#{cat}" target="#{existingCategories.selectedCategory}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            <p:confirmDialog widgetVar="deleteConfirm" showEffect="explode" hideEffect="explode" message="Biztosan törlöd a címkét?">
+                <h:commandButton value="Igen" action="#{existingCategories.deleteCategory()}" />
+                <h:commandButton value="Nem" onclick="deleteConfirm.hide()"/>
+            </p:confirmDialog>
+        </h:form>
+    </composite:implementation>
+</html>

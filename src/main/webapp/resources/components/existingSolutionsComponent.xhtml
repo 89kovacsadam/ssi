@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <composite:interface>
+
+    </composite:interface>
+    <composite:implementation>
+        <h:form>
+            <p:messages globalOnly="true"/>
+            <p:dataTable value="#{existingSolutions.solutions}" var="sol" paginator="true" rows="20">
+                <p:column>
+                    <f:facet name="header">
+                        Cím
+                    </f:facet>
+                    <h:commandLink action="#{existingSolutions.viewSolution()}" value="#{sol.title}">
+                        <f:setPropertyActionListener value="#{sol}" target="#{existingSolutions.selectedSolution}"/>
+                    </h:commandLink>
+                </p:column>
+                <p:column style="width: 100px;">
+                    <f:facet name="header">
+                        Feltöltés ideje
+                    </f:facet>
+                    <h:outputText value="#{existingSolutions.timeMap.get(sol)}" />
+                </p:column>
+                <p:column style="width: 100px;">
+                    <f:facet name="header">
+                        Nyelv
+                    </f:facet>
+                    <h:outputText value="#{sol.language.name}" />
+                </p:column>
+                <sec:authorize ifAnyGranted="ADMIN">
+                    <p:column>
+                        <f:facet name="header">
+                            Műveletek
+                        </f:facet>
+                        <p:commandButton value="Törlés" onclick="deleteConfirm.show()">
+                            <f:setPropertyActionListener target="#{existingSolutions.selectedSolution}" value="#{sol}"/>
+                        </p:commandButton>
+                    </p:column>
+                </sec:authorize>
+            </p:dataTable>
+            <p:confirmDialog widgetVar="deleteConfirm" showEffect="explode" hideEffect="explode" message="Biztosan törlöd a feladatot?">
+                <h:commandButton value="Igen" action="#{existingSolutions.deleteSolution()}" />
+                <h:commandButton value="Nem" onclick="deleteConfirm.hide()"/>
+            </p:confirmDialog>
+        </h:form>
+    </composite:implementation>
+</html>

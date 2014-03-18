@@ -1,0 +1,28 @@
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+     
+    <!--bean id="dataSource"
+              class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+ 
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/ssi" />
+        <property name="username" value="root" />
+        <property name="password" value="root" />
+    </bean>
+ 
+    <bean id="userDaoJdbc"
+          class="hu.unideb.studentSupportInterface.daoJdbcImpl.UserDaoJdbcImpl" >
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="roleDao"
+          class="hu.unideb.studentSupportInterface.daoJdbcImpl.RoleDaoJdbcImpl" >
+        <property name="dataSource" ref="dataSource" />
+    </bean-->
+    
+    <import resource="/classes/applicationContext.xml" />
+        
+</beans>

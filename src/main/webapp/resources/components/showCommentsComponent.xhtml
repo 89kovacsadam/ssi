@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <composite:interface>
+
+    </composite:interface>
+    <composite:implementation>
+        <p:messages globalOnly="true"/>
+        <h:form>
+            <p:dataTable id="commentTable" value="#{viewSolution.keys}" var="i" paginator="true" rows="20" styleClass="commentTable">
+                <p:column>
+                    <h:panelGroup rendered="#{viewSolution.commentMap.get(i) != null}">
+                        <div class="comment_wrapper">
+                            <div class="comment_header">
+                                <h:outputText value="#{viewSolution.entryWriter(viewSolution.assessmentMap.get(i), viewSolution.commentMap.get(i))}" styleClass="comment_user"/>
+
+                                <h:outputText value="Hozzászólás" styleClass="entry_type" />
+                                <h:outputText value="#{viewSolution.timeMap.get(i)}" styleClass="comment_time"/>
+                            </div>
+                            <div class="comment_main">
+                                <h:outputText value="#{viewSolution.commentMap.get(i).text}" styleClass="comment_text"/>
+                            </div>
+                            <div class="replyToDiv">
+                                <sec:authorize ifAnyGranted="ADMIN">
+                                    <p:commandLink onclick="delCommentDialog.show()" value="Törlés">
+                                        <f:setPropertyActionListener value="#{viewSolution.commentMap.get(i)}" target="#{viewSolution.selectedComment}"/>
+                                    </p:commandLink>
+                                </sec:authorize>
+                                <p:commandLink onclick="replyDialog.show()" value="Válasz erre..." >
+                                    <f:setPropertyActionListener value="#{viewSolution.commentMap.get(i)}" target="#{viewSolution.selectedComment}"/>
+                                </p:commandLink>
+                            </div>
+                        </div>
+                        <p:fieldset styleClass="repliesFieldSet"
+                                    rendered="#{!viewSolution.replyMap.get(viewSolution.commentMap.get(i)).isEmpty()}"
+                                    toggleable="true" toggleSpeed="500" legend="Válaszok megtekintése" collapsed="true">
+                            <ui:repeat value="#{viewSolution.replyMap.get(viewSolution.commentMap.get(i))}" var="reply">
+                                <div class="comment_wrapper">
+                                    <div class="comment_header">
+                                        <h:outputText value="#{viewSolution.entryWriter(null, reply)}" styleClass="comment_user"/>
+                                        <h:outputText value="#{viewSolution.repliesTimeMap.get(reply)}" styleClass="comment_time"/>
+                                    </div>
+                                    <div class="comment_main">
+                                        <h:outputText value="#{reply.text}" styleClass="comment_text"/>
+                                    </div>
+                                    <div class="replyToDiv">
+                                        <sec:authorize ifAnyGranted="ADMIN">
+                                            <p:commandLink onclick="delCommentDialog.show()" value="Törlés">
+                                                <f:setPropertyActionListener value="#{reply}" target="#{viewSolution.selectedComment}"/>
+                                            </p:commandLink>
+                                        </sec:authorize>
+                                    </div>
+                                </div>
+                            </ui:repeat>
+                        </p:fieldset>
+
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{viewSolution.assessmentMap.get(i) != null and viewSolution.assessmentMap.get(i).correct == true}">
+                        <div class="pos_assessment_wrapper">
+                            <div class="pos_assessment_header">
+                                <h:outputText value="#{viewSolution.entryWriter(viewSolution.assessmentMap.get(i), viewSolution.commentMap.get(i))}" styleClass="comment_user"/>
+                                <h:outputText value="Pozitív értékelés" styleClass="entry_type" rendered="#{viewSolution.assessmentMap.get(i).correct == true}" />
+                                <h:outputText value="Negatív értékelés" styleClass="entry_type" rendered="#{viewSolution.assessmentMap.get(i).correct == false}" />
+                                <sec:authorize ifAnyGranted="ASSESSOR, TUTOR">
+                                    <p:commandLink id="posEval" action="#{viewSolution.addPositiveEvaluation()}" styleClass="posEval"
+                                                   value="Egyetértek" update="evalDifference, posEval, negEval"
+                                                   disabled="#{viewSolution.userEvaluationMap.get(viewSolution.assessmentMap.get(i)) == 1 or viewSolution.myAssessment(viewSolution.assessmentMap.get(i))}">
+                                        <f:setPropertyActionListener target="#{viewSolution.selectedAssessment}" value="#{viewSolution.assessmentMap.get(i)}"/>
+                                    </p:commandLink>
+                                    <p:commandLink id="negEval" action="#{viewSolution.addNegativeEvaluation()}" styleClass="negEval"
+                                                   value="Nem értek egyet" update="evalDifference, posEval, negEval"
+                                                   disabled="#{viewSolution.userEvaluationMap.get(viewSolution.assessmentMap.get(i)) == -1 or viewSolution.myAssessment(viewSolution.assessmentMap.get(i))}">
+                                        <f:setPropertyActionListener target="#{viewSolution.selectedAssessment}" value="#{viewSolution.assessmentMap.get(i)}"/>
+                                    </p:commandLink>
+                                </sec:authorize>
+                                <h:outputText value="#{viewSolution.evaluationMap.get(viewSolution.assessmentMap.get(i))}" id="evalDifference" styleClass="evalDifference"/>
+                                <h:outputText value="#{viewSolution.timeMap.get(i)}" styleClass="comment_time"/>
+                            </div>
+                            <h:panelGroup rendered="#{viewSolution.assessmentMap.get(i).comment != null}">
+                                <div class="comment_main">
+                                    <h:outputText value="#{viewSolution.assessmentMap.get(i).comment.text}" styleClass="comment_text"/>
+                                </div>
+                                <div class="replyToDiv">
+                                    <sec:authorize ifAnyGranted="ADMIN">
+                                        <p:commandLink onclick="delAssessmentDialog.show()" value="Törlés">
+                                            <f:setPropertyActionListener value="#{viewSolution.assessmentMap.get(i)}" target="#{viewSolution.selectedAssessment}"/>
+                                        </p:commandLink>
+                                    </sec:authorize>
+                                    <p:commandLink onclick="replyDialog.show()" value="Válasz erre..." rendered="#{viewSolution.assessmentMap.get(i).comment != null}" >
+                                        <f:setPropertyActionListener value="#{viewSolution.assessmentMap.get(i).comment}" target="#{viewSolution.selectedComment}"/>
+                                    </p:commandLink>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                        <p:fieldset styleClass="repliesFieldSet"
+                                    rendered="#{viewSolution.assessmentMap.get(i).comment != null and !viewSolution.replyMap.get(viewSolution.assessmentMap.get(i).comment).isEmpty()}"
+                                    toggleable="true" toggleSpeed="500" legend="Válaszok megtekintése" collapsed="true">
+                            <ui:repeat value="#{viewSolution.replyMap.get(viewSolution.assessmentMap.get(i).comment)}" var="reply">
+                                <div class="comment_wrapper">
+                                    <div class="comment_header">
+                                        <h:outputText value="#{viewSolution.entryWriter(null, reply)}" styleClass="comment_user"/>                                        <h:outputText value="#{viewSolution.repliesTimeMap.get(reply)}" styleClass="comment_time"/>
+                                    </div>
+                                    <div class="comment_main">
+                                        <h:outputText value="#{reply.text}" styleClass="comment_text"/>
+                                    </div>
+                                    <div class="replyToDiv">
+                                        <sec:authorize ifAnyGranted="ADMIN">
+                                            <p:commandLink onclick="delCommentDialog.show()" value="Törlés">
+                                                <f:setPropertyActionListener value="#{reply}" target="#{viewSolution.selectedComment}"/>
+                                            </p:commandLink>
+                                        </sec:authorize>
+                                    </div>
+                                </div>
+                            </ui:repeat>
+                        </p:fieldset>
+
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{viewSolution.assessmentMap.get(i) != null and viewSolution.assessmentMap.get(i).correct == false}">
+                        <div class="neg_assessment_wrapper">
+                            <div class="neg_assessment_header">
+                                <h:outputText value="#{viewSolution.entryWriter(viewSolution.assessmentMap.get(i), viewSolution.commentMap.get(i))}" styleClass="comment_user"/>                               <h:outputText value="Pozitív értékelés" styleClass="entry_type" rendered="#{viewSolution.assessmentMap.get(i).correct == true}" />
+                                <h:outputText value="Negatív értékelés" styleClass="entry_type" rendered="#{viewSolution.assessmentMap.get(i).correct == false}" />
+                                <sec:authorize ifAnyGranted="ASSESSOR, TUTOR">
+                                    <p:commandLink id="posEval_" action="#{viewSolution.addPositiveEvaluation()}" styleClass="posEval"
+                                                   value="Egyetértek" update="evalDifference_, posEval_, negEval_" style="color: white;"
+                                                   disabled="#{viewSolution.userEvaluationMap.get(viewSolution.assessmentMap.get(i)) == 1 or viewSolution.myAssessment(viewSolution.assessmentMap.get(i))}">
+                                        <f:setPropertyActionListener target="#{viewSolution.selectedAssessment}" value="#{viewSolution.assessmentMap.get(i)}"/>
+                                    </p:commandLink>
+                                    <p:commandLink id="negEval_" action="#{viewSolution.addNegativeEvaluation()}" styleClass="negEval"
+                                                   value="Nem értek egyet" update="evalDifference_, posEval_, negEval_" style="color: white;"
+                                                   disabled="#{viewSolution.userEvaluationMap.get(viewSolution.assessmentMap.get(i)) == -1 or viewSolution.myAssessment(viewSolution.assessmentMap.get(i))}">
+                                        <f:setPropertyActionListener target="#{viewSolution.selectedAssessment}" value="#{viewSolution.assessmentMap.get(i)}"/>
+                                    </p:commandLink>
+                                </sec:authorize>
+                                <h:outputText value="#{viewSolution.evaluationMap.get(viewSolution.assessmentMap.get(i))}" id="evalDifference_" styleClass="evalDifference"/>
+                                <h:outputText value="#{viewSolution.timeMap.get(i)}" styleClass="comment_time"/>
+                            </div>
+                            <h:panelGroup rendered="#{viewSolution.assessmentMap.get(i).comment != null}">
+                                <div class="comment_main">
+                                    <h:outputText value="#{viewSolution.assessmentMap.get(i).comment.text}" styleClass="comment_text"/>
+                                </div>
+                                <div class="replyToDiv">
+                                    <sec:authorize ifAnyGranted="ADMIN">
+                                        <p:commandLink onclick="delAssessmentDialog.show()" value="Törlés">
+                                            <f:setPropertyActionListener value="#{viewSolution.assessmentMap.get(i)}" target="#{viewSolution.selectedAssessment}"/>
+                                        </p:commandLink>
+                                    </sec:authorize>
+                                    <p:commandLink onclick="replyDialog.show()" value="Válasz erre..." rendered="#{viewSolution.assessmentMap.get(i).comment != null}" >
+                                        <f:setPropertyActionListener value="#{viewSolution.assessmentMap.get(i).comment}" target="#{viewSolution.selectedComment}"/>
+                                    </p:commandLink>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                        <p:fieldset styleClass="repliesFieldSet"
+                                    rendered="#{viewSolution.assessmentMap.get(i).comment != null and !viewSolution.replyMap.get(viewSolution.assessmentMap.get(i).comment).isEmpty()}"
+                                    toggleable="true" toggleSpeed="500" legend="Válaszok megtekintése" collapsed="true">
+                            <ui:repeat value="#{viewSolution.replyMap.get(viewSolution.assessmentMap.get(i).comment)}" var="reply">
+                                <div class="comment_wrapper">
+                                    <div class="comment_header">
+                                        <h:outputText value="#{viewSolution.entryWriter(null, reply)}" styleClass="comment_user"/>                                    <h:outputText value="#{viewSolution.repliesTimeMap.get(reply)}" styleClass="comment_time"/>
+                                    </div>
+                                    <div class="comment_main">
+                                        <h:outputText value="#{reply.text}" styleClass="comment_text"/>
+                                    </div>
+                                    <div class="replyToDiv">
+                                        <sec:authorize ifAnyGranted="ADMIN">
+                                            <p:commandLink onclick="delCommentDialog.show()" value="Törlés">
+                                                <f:setPropertyActionListener value="#{reply}" target="#{viewSolution.selectedComment}"/>
+                                            </p:commandLink>
+                                        </sec:authorize>
+                                    </div>
+                                </div>
+                            </ui:repeat>
+                        </p:fieldset>
+
+                    </h:panelGroup>
+
+                </p:column>
+            </p:dataTable>
+            <p:dialog widgetVar="replyDialog" header="Válasz" showEffect="explode"
+                      styleClass="replyWindow" hideEffect="explode">
+                <h:panelGrid columns="1">
+                    <h:inputTextarea value="#{viewSolution.newComment.text}" styleClass="replyArea"/>
+                    <h:commandButton value="Válaszolok" action="#{viewSolution.addReplyComment()}"/>
+                </h:panelGrid>
+            </p:dialog>
+            <p:confirmDialog widgetVar="delCommentDialog" showEffect="explode" hideEffect="explode" message="Biztosan törlöd a hozzászólást?">
+                <h:commandButton value="Igen" action="#{viewSolution.deleteComment()}" />
+                <h:commandButton value="Nem" onclick="deleteConfirm.hide()"/>
+            </p:confirmDialog>
+            <p:confirmDialog widgetVar="delAssessmentDialog" showEffect="explode" hideEffect="explode" message="Biztosan törlöd az értékelést?">
+                <h:commandButton value="Igen" action="#{viewSolution.deleteAssessment()}" />
+                <h:commandButton value="Nem" onclick="deleteConfirm.hide()"/>
+            </p:confirmDialog>
+        </h:form>
+    </composite:implementation>
+</html>

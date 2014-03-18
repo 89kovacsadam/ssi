@@ -1,0 +1,303 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2014.03.08., 19:03:28
+    Author     : Adam
+*/
+
+.container{
+    width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    color: rgba(34,75,106, 0.9);
+}
+
+.comment_wrapper{
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.comment_header{
+    height: 20px;
+    padding: 5px;
+    padding-bottom: 3px;
+    background-color: rgb(112,168,210);
+    color: white;
+    font-weight: bold;
+}
+
+.comment_main{
+    padding: 5px;
+    white-space: pre-wrap;
+    color: rgba(34,75,106, 0.9);
+}
+
+.comment_user{
+    float: left;
+    width: 100px;
+}
+
+.comment_time{
+    float: right;
+}
+
+.entry_type{
+    float: left;
+    margin-left: 100px;
+}
+
+.repliesFieldSet{
+    border: none;
+}
+
+body{
+    font-size: 12px;
+    font-family: Arial;
+    color: rgba(34,75,106, 0.9);
+}
+
+.commentTable{
+    border: none;
+}
+
+.ui-datatable.commentTable .ui-datatable-data tr,
+.ui-datatable.commentTable .ui-datatable-data-empty tr,
+.ui-datatable.commentTable .ui-datatable-data td,
+.ui-datatable.commentTable .ui-datatable-data-empty td {
+    border-style: none;
+}
+
+.ui-fieldset.repliesFieldSet{
+    margin-top: -15px;
+}
+
+.replyToDiv{
+    text-align: right;
+}
+
+.posEval{
+    margin-left: 50px;
+}
+
+.negEval{
+    margin-left: 20px;
+}
+
+.evalDifference{
+    margin-left: 40px;
+}
+
+.pos_assessment_wrapper{
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.pos_assessment_header{
+    height: 20px;
+    padding: 5px;
+    padding-bottom: 3px;
+    background-color: rgba(190,216,235, 0.7);
+    color: rgba(34,75,106, 0.9);
+    font-weight: bold;
+}
+
+.pos_assessment_header a{
+    color: rgba(34,75,106, 0.9);
+}
+
+.neg_assessment_wrapper{
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.neg_assessment_header{
+    height: 20px;
+    padding: 5px;
+    padding-bottom: 3px;
+    background-color: rgba(34,75,106, 0.9);
+    color: white;
+    font-weight: bold;
+}
+
+.neg_assessment_header a{
+    color: white;
+}
+
+.codeArea{
+    width: 80%;
+    max-width: 80%;
+    margin-left: 85px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    height: 300px;
+    overflow-y: scroll;
+    
+}
+
+.codeAreaDiv{
+    width: 100%;
+}
+
+.solTitle{
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.solDefinition{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: justify;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    white-space: pre-wrap;
+}
+
+.solLanguage{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+}
+
+.solDownload{
+    margin-left: 70px;
+    margin-bottom: 30px;
+}
+
+.userInfo{
+    width: 200px;
+    text-align: center;
+    float: right;
+}
+
+.userName{
+    font-weight: bold;
+}
+
+.menuList a{
+   color: rgba(34,75,106, 0.9);
+   text-decoration: none;
+}
+
+.menuList li{
+   float: left;
+   padding: 5px;
+}
+
+.menuList{
+   list-style-type: none;
+   float: left;
+   margin-left: -35px;
+   width: 650px;
+}
+
+.activeMenuItem{
+    border-left: solid 1px;
+    border-right: solid 1px;
+    border-top: solid 1px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-color: rgb(166,201,226);
+    font-weight: bolder;
+}
+
+.menuItem{
+    border-bottom: solid 1px;
+    border-color: rgb(166,201,226);
+    font-weight: bold;
+}
+
+.navContainer{
+    width: 100%;
+    margin-bottom: 15px;
+    float: left;
+}
+
+.addAssessmentFS{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.addCommentFS{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.replyArea{
+    width: 600px;
+    height: 200px;
+}
+
+.commentArea{
+    width: 855px;
+    height: 150px;
+}
+
+.blue{
+    color: rgba(34,75,106, 0.9);
+}
+
+.userInfo a{
+    color: rgba(34,75,106, 0.9);
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.loginPanel{
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 200px;
+}
+
+.loginGrid{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.blue input{
+    color: rgba(34,75,106, 0.9);
+}
+
+.blue textarea{
+    color: rgba(34,75,106, 0.9);
+}
+
+.blue select{
+    color: rgba(34,75,106, 0.9);
+}
+
+.ui-widget{
+    font-family: Arial;
+}
+
+.ui-widget-content a{
+    color: rgba(34,75,106, 0.9);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.ui-widget-content{
+    color: rgba(34,75,106, 0.9);
+}
+
+.registrationGrid{
+    margin-left: auto;
+    margin-right: auto;
+}

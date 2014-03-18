@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <composite:interface>
+
+    </composite:interface>
+    <composite:implementation>
+        <sec:authorize ifAnyGranted="ASSESSOR, TUTOR">
+            <p:fieldset legend="Megoldás értékelése" toggleable="true" toggleSpeed="500" collapsed="true"
+                        rendered="#{viewSolution.canAddAssessment() == true}" styleClass="addAssessmentFS">
+                <h:form>
+                    <h:panelGrid columns="1">
+                        Szerinted helyes a megoldás? <h:selectBooleanCheckbox value="#{viewSolution.newAssessment.correct}"/>
+                        Indoklás: <h:inputTextarea value="#{viewSolution.newAssessment.comment.text}" styleClass="commentArea"/>
+                        <h:commandButton value="Értékelem" action="#{viewSolution.addAssessment()}" />
+                    </h:panelGrid>
+                </h:form>
+            </p:fieldset>
+        </sec:authorize>
+    </composite:implementation>
+</html>

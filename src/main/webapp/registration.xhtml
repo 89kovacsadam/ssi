@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:head>
+        <title>Regisztráció</title>
+        <meta name="viewport" content="width=device-width"/>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet library="css" name="style.css"  />
+        <div class="container">
+            <p:panel header="Regisztráció">
+            <h:form>
+                <p:messages id="msgs" globalOnly="true" />
+                <h:panelGrid columns="2" class="registrationGrid">
+                    E-mail cím: <h:inputText value="#{registration.newUser.email}" />
+                    Vezetéknév: <h:inputText value="#{registration.newUser.lastName}" />
+                    Keresztnév: <h:inputText value="#{registration.newUser.firstName}" />
+                    Jelszó: <h:inputSecret value="#{registration.newUser.password}" />
+                    Jelszó ismét: <h:inputSecret value="#{registration.pwdCheck}" />
+                    Neptun-kód: <h:inputText value="#{registration.newUser.neptunCode}" />
+                    Szeretnéd, hogy neved publikus legyen az oktatók előtt?
+                    <h:selectBooleanCheckbox value="#{registration.newUser.isPublic}" />
+                    Milyen szerepkör(ök)ben szeretnél regisztrálni?
+                    <h:selectManyCheckbox value="#{registration.selectedRoles}" converter="roleConverter" >
+                        <f:selectItems value="#{registration.roles}" var="role" itemValue="#{role}" itemLabel="#{registration.roleLabels.get(role.role)}" />
+                    </h:selectManyCheckbox>
+                    Milyen nyelvekből tudsz segíteni a többieknek?
+                    <h:selectManyCheckbox value="#{registration.selectedLanguages}" converter="languageConverter" >
+                        <f:selectItems value="#{registration.languages}" var="lang" itemValue="#{lang}" itemLabel="#{lang.name}" />
+                    </h:selectManyCheckbox>
+                    <h:commandButton action="#{registration.addUser()}" value="Regisztrálok" />
+                </h:panelGrid>
+            </h:form>
+            </p:panel>
+        </div>
+    </h:body>
+</html>

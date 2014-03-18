@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <composite:interface>
+
+    </composite:interface>
+    <composite:implementation>
+        <div class="navContainer">
+            <div style="float:left;">
+                <ul class="menuList">
+                    <sec:authorize ifAnyGranted="UPLOADER">
+                        <li class="#{view.viewId.contains('addSolution')?'activeMenuItem':'menuItem'}"><a href="addSolution.jsf">Feladat feltöltése</a></li>
+                    </sec:authorize>
+                    <li class="#{view.viewId.contains('existingSolutions') or view.viewId.contains('viewSolution') ?'activeMenuItem':'menuItem'}"><a href="existingSolutions.jsf">Összes feladat</a></li>
+                    <sec:authorize ifAnyGranted="UPLOADER">
+                        <li class="#{view.viewId.contains('mySolutions')?'activeMenuItem':'menuItem'}"><a href="mySolutions.jsf">Feladataim</a></li>
+                    </sec:authorize>
+                    <sec:authorize ifAnyGranted="ASSESSOR,TUTOR">
+                        <li class="#{view.viewId.contains('assessedSolutions')?'activeMenuItem':'menuItem'}"><a href="assessedSolutions.jsf">Értékelt feladatok</a></li>
+                    </sec:authorize>
+                    <sec:authorize ifAnyGranted="ASSESSOR">
+                        <li class="#{view.viewId.contains('solutionsToAssess')?'activeMenuItem':'menuItem'}"><a href="solutionsToAssess.jsf">Értékelendő feladatok</a></li>
+                    </sec:authorize>
+                    <li class="#{view.viewId.contains('manageProfile')?'activeMenuItem':'menuItem'}"><a href="manageProfile.jsf">Személyes adatok</a></li>                    
+                    <sec:authorize ifAnyGranted="ADMIN">
+                        <li class="#{view.viewId.contains('existingLanguages')?'activeMenuItem':'menuItem'}"><a href="existingLanguages.jsf">Nyelvek</a></li>
+                    </sec:authorize>
+                    <sec:authorize ifAnyGranted="ADMIN">
+                        <li class="#{view.viewId.contains('existingCategories')?'activeMenuItem':'menuItem'}"><a href="existingCategories.jsf">Címkék</a></li>
+                    </sec:authorize>
+                </ul>
+            </div>
+            <h:form>
+                <div class="userInfo">
+                    Bejelentkezve, mint<br/><h:outputText value="#{userInfo.user.lastName} #{userInfo.user.firstName}" styleClass="userName"/><br/>
+                    <ui:repeat value="#{userInfo.user.roles}" var="role">
+                        <h:outputText value="#{userInfo.roleMap.get(role)} " />
+                    </ui:repeat>
+                    <div style="margin-top: 10px;"><h:commandLink value="Kilépés" action="#{userInfo.logout()}"/></div>
+                </div>
+            </h:form>
+        </div>
+    </composite:implementation>
+</html>

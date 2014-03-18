@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <composite:interface>
+
+    </composite:interface>
+    <composite:implementation>
+
+        <h:outputStylesheet library="css" name="style.css"  />
+        <p:panel header="Személyes adatok">
+            <h:form>
+                <p:messages id="msgs" globalOnly="true" />
+                <h:panelGrid columns="2" class="registrationGrid">
+                    E-mail cím: <h:inputText value="#{manageProfile.user.email}" />
+                    Vezetéknév: <h:inputText value="#{manageProfile.user.lastName}" />
+                    Keresztnév: <h:inputText value="#{manageProfile.user.firstName}" />
+                    Neptun-kód: <h:inputText value="#{manageProfile.user.neptunCode}" />
+                    Szeretnéd, hogy neved publikus legyen az oktatók előtt?
+                    <h:selectBooleanCheckbox value="#{manageProfile.user.isPublic}" />
+                    Milyen nyelvekből tudsz segíteni a többieknek?
+                    <h:selectManyCheckbox value="#{manageProfile.selectedLanguages}" converter="languageConverter" >
+                        <f:selectItems value="#{manageProfile.languages}" var="lang" itemValue="#{lang}" itemLabel="#{lang.name}" />
+                    </h:selectManyCheckbox>
+                    <h:commandButton action="#{manageProfile.updateUser()}" value="Módosítás" />
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+    </composite:implementation>
+</html>

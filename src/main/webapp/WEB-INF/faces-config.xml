@@ -1,0 +1,189 @@
+<?xml version="1.0" ?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+    http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+        
+    <application>
+        <el-resolver>
+            org.springframework.web.jsf.el.SpringBeanFacesELResolver
+        </el-resolver>
+    </application>
+        
+    <converter>
+        <converter-id>roleConverter</converter-id>
+        <converter-class>
+            hu.unideb.studentSupportInterface.converters.RoleConverter
+        </converter-class>
+    </converter>
+    
+    <converter>
+        <converter-id>languageConverter</converter-id>
+        <converter-class>
+            hu.unideb.studentSupportInterface.converters.LanguageConverter
+        </converter-class>
+    </converter>
+    
+    <converter>
+        <converter-id>categoryConverter</converter-id>
+        <converter-class>
+            hu.unideb.studentSupportInterface.converters.CategoryConverter
+        </converter-class>
+    </converter>
+
+ 
+    <managed-bean>
+        <managed-bean-name>testBean</managed-bean-name>
+        <managed-bean-class>testPackage.TestBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>userDao</property-name>
+            <value>#{userDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>roleDao</property-name>
+            <value>#{roleDao}</value>
+        </managed-property>
+    </managed-bean>
+        
+    <managed-bean>
+        <managed-bean-name>loginController</managed-bean-name>
+        <managed-bean-class>hu.unideb.studentSupportInterface.backing.LoginController</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+        
+    <managed-bean>
+        <managed-bean-name>registration</managed-bean-name>
+        <managed-bean-class>hu.unideb.studentSupportInterface.backing.Registration</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>userDao</property-name>
+            <value>#{userDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>roleDao</property-name>
+            <value>#{roleDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>languageDao</property-name>
+            <value>#{languageDao}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>addSolution</managed-bean-name>
+        <managed-bean-class>hu.unideb.studentSupportInterface.backing.AddSolution</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>solutionDao</property-name>
+            <value>#{solutionDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>languageDao</property-name>
+            <value>#{languageDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>userDao</property-name>
+            <value>#{userDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>categoryDao</property-name>
+            <value>#{categoryDao}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>existingSolutions</managed-bean-name>
+        <managed-bean-class>hu.unideb.studentSupportInterface.backing.ExistingSolutions</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>solutionDao</property-name>
+            <value>#{solutionDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>categoryDao</property-name>
+            <value>#{categoryDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>userDao</property-name>
+            <value>#{userDao}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>viewSolution</managed-bean-name>
+        <managed-bean-class>hu.unideb.studentSupportInterface.backing.ViewSolution</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>solutionDao</property-name>
+            <value>#{solutionDao}</value>
+        </managed-property> 
+        <managed-property>
+            <property-name>userDao</property-name>
+            <value>#{userDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>assessmentDao</property-name>
+            <value>#{assessmentDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>commentDao</property-name>
+            <value>#{commentDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>evaluationDao</property-name>
+            <value>#{evaluationDao}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>userInfo</managed-bean-name>
+        <managed-bean-class>hu.unideb.studentSupportInterface.backing.UserInfo</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>userDao</property-name>
+            <value>#{userDao}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>manageProfile</managed-bean-name>
+        <managed-bean-class>hu.unideb.studentSupportInterface.backing.ManageProfile</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>userDao</property-name>
+            <value>#{userDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>languageDao</property-name>
+            <value>#{languageDao}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>existingLanguages</managed-bean-name>
+        <managed-bean-class>hu.unideb.studentSupportInterface.backing.ExistingLanguages</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>solutionDao</property-name>
+            <value>#{solutionDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>languageDao</property-name>
+            <value>#{languageDao}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>existingCategories</managed-bean-name>
+        <managed-bean-class>hu.unideb.studentSupportInterface.backing.ExistingCategories</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>categoryDao</property-name>
+            <value>#{categoryDao}</value>
+        </managed-property>
+    </managed-bean>
+ 
+</faces-config>

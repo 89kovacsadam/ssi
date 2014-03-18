@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <composite:interface>
+
+    </composite:interface>
+    <composite:implementation>
+        <p:fieldset legend="Szűrés" toggleable="true" toggleSpeed="500" collapsed="#{existingSolutions.notFiltered}" style="margin-bottom: 30px;">
+            <h:form>
+                <h:panelGrid columns="3" styleClass="registrationGrid">
+                    <h:outputText value="Címkék"/>
+                    <h:outputText value="Keresőszó" style="margin-left: 30px; margin-right: 30px;"/>
+                    <h:outputText value=""/>
+                    <h:selectManyListbox value="#{existingSolutions.selectedCategories}" converter="categoryConverter" style="width: 200px; height: 50px;" styleClass="blue">
+                        <f:selectItems value="#{existingSolutions.categories}" var="cat" itemLabel="#{cat.name}"/>
+                    </h:selectManyListbox>
+                    <h:inputText value="#{existingSolutions.pattern}" style="margin-left: 30px; margin-right: 30px;" />
+                    <h:commandButton action="#{existingSolutions.filterSolutions()}" value="Szűrés"/>
+                </h:panelGrid>
+            </h:form>
+        </p:fieldset>
+    </composite:implementation>
+</html>
