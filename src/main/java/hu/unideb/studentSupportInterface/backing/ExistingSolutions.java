@@ -4,6 +4,7 @@
  */
 package hu.unideb.studentSupportInterface.backing;
 
+import hu.unideb.studentSupportInterface.dao.AssessmentDao;
 import hu.unideb.studentSupportInterface.dao.CategoryDao;
 import hu.unideb.studentSupportInterface.dao.SolutionDao;
 import hu.unideb.studentSupportInterface.dao.UserDao;
@@ -38,6 +39,9 @@ public class ExistingSolutions implements Serializable {
     private CategoryDao categoryDao;
     private User user;
     private UserDao userDao;
+    private HashMap<Solution,Integer> countAssessmentMap;
+    private HashMap<Solution,Float> posRatioaMap;
+    private AssessmentDao assessmentDao;
 
     @PostConstruct
     public void initBean() {
@@ -57,11 +61,15 @@ public class ExistingSolutions implements Serializable {
 
         selectedCategories = new ArrayList<Category>();
         categories = categoryDao.getAllCategory();
+        countAssessmentMap = new HashMap<Solution, Integer>();
+        posRatioaMap = new HashMap<Solution, Float>();
 
         timeMap = new HashMap<Solution, String>();
         for (Solution s : solutions) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             timeMap.put(s, format.format(s.getTime().getTime()));
+            countAssessmentMap.put(s, assessmentDao.countAssessmentsForSolution(s));
+            posRatioaMap.put(s, assessmentDao.positiveAssessmentRatioForSolution(s));
         }
 
     }
@@ -99,7 +107,7 @@ public class ExistingSolutions implements Serializable {
     public String viewSolution() {
         Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
         flash.put("solution_id", selectedSolution.getId());
-        return "/viewSolution.jsf";
+        return "/viewSolution.jsf?solution_id=" + selectedSolution.getId();
     }
     
     public void deleteSolution(){
@@ -183,5 +191,31 @@ public class ExistingSolutions implements Serializable {
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
+
+    public HashMap<Solution, Integer> getCountAssessmentMap() {
+        return countAssessmentMap;
+    }
+
+    public void setCountAssessmentMap(HashMap<Solution, Integer> countAssessmentMap) {
+        this.countAssessmentMap = countAssessmentMap;
+    }
+
+    public HashMap<Solution, Float> getPosRatioaMap() {
+        return posRatioaMap;
+    }
+
+    public void setPosRatioaMap(HashMap<Solution, Float> posRatioaMap) {
+        this.posRatioaMap = posRatioaMap;
+    }
+
+    public AssessmentDao getAssessmentDao() {
+        return assessmentDao;
+    }
+
+    public void setAssessmentDao(AssessmentDao assessmentDao) {
+        this.assessmentDao = assessmentDao;
+    }
+    
+    
 
 }

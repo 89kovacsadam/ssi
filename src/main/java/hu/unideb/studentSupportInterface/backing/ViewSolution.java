@@ -26,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.security.core.Authentication;
@@ -69,8 +70,18 @@ public class ViewSolution implements Serializable {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         user = (User) userDao.loadUserByUsername(auth.getName());
 
-        if (flash.get("solution_id") != null) {
-            solution = solutionDao.getSolutionById((Integer) flash.get("solution_id"));
+        int solution_id = -1;
+        HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        
+        if (req.getParameter("solution_id") != null) {
+            solution_id = Integer.parseInt(req.getParameter("solution_id"));
+        } else {
+            if (flash.get("solution_id") != null) {
+                solution_id = (Integer) flash.get("solution_id");
+            }
+        }
+        if (solution_id != -1) {
+            solution = solutionDao.getSolutionById(solution_id);
         }
         if (solution.getFile() != null) {
             file = new DefaultStreamedContent(solution.getFile(), "application/zip", solution.getId() + ".zip");

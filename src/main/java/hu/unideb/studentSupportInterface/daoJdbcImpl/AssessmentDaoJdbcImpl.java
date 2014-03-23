@@ -114,6 +114,28 @@ public class AssessmentDaoJdbcImpl extends JdbcDaoSupport implements AssessmentD
         return list;
         
     }
+    
+    public int countAssessmentsForSolution(Solution solution){
+        String sql = "select count(*) from assessment where solution_id = ?";
+        
+        int count = getJdbcTemplate().queryForInt(sql, solution.getId());
+        
+        return count;
+        
+    }
+    
+    public Float positiveAssessmentRatioForSolution(Solution solution){
+        String sql = "select count(*) from assessment where solution_id = ? and is_correct is true";
+        
+        int pos = getJdbcTemplate().queryForInt(sql, solution.getId());
+        int count = countAssessmentsForSolution(solution);
+        
+        if(count == 0){
+            return new Float(0);
+        }
+        
+        return new Float(pos) / new Float(count);
+    }
 
     public CommentDao getCommentDao() {
         return commentDao;

@@ -26,4 +26,8 @@ public interface AssessmentDao {
     
     public List<Assessment> getAssessmentsBySolution(Solution solution);
     
+    public int countAssessmentsForSolution(Solution solution);
+    
+    public Float positiveAssessmentRatioForSolution(Solution solution);
+    
 }

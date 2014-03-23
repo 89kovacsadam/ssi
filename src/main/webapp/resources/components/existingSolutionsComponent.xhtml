@@ -33,14 +33,28 @@ and open the template in the editor.
                     </f:facet>
                     <h:outputText value="#{existingSolutions.timeMap.get(sol)}" />
                 </p:column>
-                <p:column style="width: 100px;">
+                <p:column style="width: 50px;">
                     <f:facet name="header">
                         Nyelv
                     </f:facet>
                     <h:outputText value="#{sol.language.name}" />
                 </p:column>
+                <p:column style="width: 50px;">
+                    <f:facet name="header">
+                        Értékelések száma
+                    </f:facet>
+                    <h:outputText value="#{existingSolutions.countAssessmentMap.get(sol)}"/>
+                </p:column>
+                <p:column style="width: 50px;">
+                    <f:facet name="header">
+                        Pozitív értékelések
+                    </f:facet>
+                    <h:outputText value="#{existingSolutions.posRatioaMap.get(sol)}">
+                        <f:convertNumber type="percent" />
+                    </h:outputText>
+                </p:column>
                 <sec:authorize ifAnyGranted="ADMIN">
-                    <p:column>
+                    <p:column style="width: 50px;">
                         <f:facet name="header">
                             Mûveletek
                         </f:facet>

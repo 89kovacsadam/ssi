@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <composite:interface>
+
+    </composite:interface>
+    <composite:implementation>
+
+        <h:outputStylesheet library="css" name="style.css"  />
+        <p:panel id="inactivePanel" binding="#{inactivePanel}" header="Inaktív felhasználók">
+            <h:form>
+                <p:dataTable value="#{manageUsers.inactiveUsers}" var="user">
+                    <p:column>
+                        <f:facet name="header">
+                            Név
+                        </f:facet>
+                        <h:outputText value="#{user.lastName} #{user.firstName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            E-mail cím
+                        </f:facet>
+                        <h:outputText value="#{user.email}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Jogosultságok
+                        </f:facet>
+                        <ui:repeat value="#{user.roles}" var="role">
+                            <h:outputText value="#{manageUsers.roleLabelMap.get(role)} "/>
+                        </ui:repeat>
+                    </p:column> 
+                    <p:column>
+                        <f:facet name="header">
+                            Műveletek
+                        </f:facet>
+                        <p:commandButton value="Aktiválás" action="#{manageUsers.activateUser()}" update=":#{inactivePanel.clientId}, :#{activePanel.clientId}">
+                            <f:setPropertyActionListener target="#{manageUsers.selectedUser}" value="#{user}"/>
+                        </p:commandButton>
+                        <p:commandButton value="Szerepkörök kezelése" oncomplete="modRoleDialog.show()" update=":#{inactivePanel.clientId}, :#{activePanel.clientId}, :#{dialog.clientId}">
+                            <f:setPropertyActionListener target="#{manageUsers.selectedUser}" value="#{user}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+        <p:panel id="activePanel" binding="#{activePanel}" header="Aktív felhasználók">
+            <h:form>
+                <p:dataTable value="#{manageUsers.activeUsers}" var="user">
+                    <p:column>
+                        <f:facet name="header">
+                            Név
+                        </f:facet>
+                        <h:outputText value="#{user.lastName} #{user.firstName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            E-mail cím
+                        </f:facet>
+                        <h:outputText value="#{user.email}"/>
+                    </p:column> 
+                    <p:column>
+                        <f:facet name="header">
+                            Jogosultságok
+                        </f:facet>
+                        <ui:repeat value="#{user.roles}" var="role">
+                            <h:outputText value="#{manageUsers.roleLabelMap.get(role)} "/>
+                        </ui:repeat>
+                    </p:column> 
+                    <p:column>
+                        <f:facet name="header">
+                            Műveletek
+                        </f:facet>
+                        <p:commandButton value="Inaktiválás" action="#{manageUsers.inactivateUser()}" update=":#{inactivePanel.clientId}, :#{activePanel.clientId}">
+                            <f:setPropertyActionListener target="#{manageUsers.selectedUser}" value="#{user}"/>
+                        </p:commandButton>
+                        <p:commandButton value="Szerepkörök kezelése" oncomplete="modRoleDialog.show()" update=":#{inactivePanel.clientId}, :#{activePanel.clientId}, :#{dialog.clientId}">
+                            <f:setPropertyActionListener target="#{manageUsers.selectedUser}" value="#{user}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <p:dialog id="dialog" binding="#{dialog}" widgetVar="modRoleDialog" header="#{manageUsers.selectedUser.lastName} #{manageUsers.selectedUser.firstName} szerepkörei"
+                          >
+                    <h:selectManyCheckbox value="#{manageUsers.selectedRoles}" converter="roleConverter" >
+                        <f:selectItems value="#{manageUsers.roles}" var="role" itemValue="#{role}" itemLabel="#{manageUsers.roleLabelMap.get(role)}" />
+                    </h:selectManyCheckbox>
+                    <h:commandButton value="Mentés" action="#{manageUsers.changeUsersRoles()}"/>
+                </p:dialog>
+            </h:form>
+        </p:panel>
+    </composite:implementation>
+</html>

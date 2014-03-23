@@ -18,34 +18,41 @@ and open the template in the editor.
         <h:form enctype="multipart/form-data">
             <p:panel header="Feladat feltöltése" >
                 <h:panelGrid columns="2" styleClass="blue">
-                    A feladat címe: <h:inputText value="#{addSolution.solution.title}" style="width: 510px;" />
-                    A feladat leírása: <h:inputTextarea value="#{addSolution.solution.definition}" style="width: 510px; height: 150px; overflow-y: scroll; max-width: 510px;" />
+                    A feladat címe: <h:inputText id="title" value="#{addSolution.solution.title}" style="width: 510px;" required="true" requiredMessage="Kötelezõ címet megadni!" />
+                    <span></span><p:message for="title"/>
+                    A feladat leírása: <h:inputTextarea id="def" value="#{addSolution.solution.definition}" style="width: 510px; height: 150px; overflow-y: scroll; max-width: 510px;" required="true" requiredMessage="Kötelezõ leírást megadni!" />
+                    <span></span><p:message for="def"/>
                     Milyen formában szeretnéd feltölteni a megoldást?
-                    <h:selectOneMenu value="#{addSolution.selectedInput}" valueChangeListener="#{addSolution.inputChangeListener}" style="width: 100px;">
+                    <h:selectOneMenu id="inputType" value="#{addSolution.selectedInput}" valueChangeListener="#{addSolution.inputChangeListener}" style="width: 100px;">
                         <f:selectItem itemValue="1" itemLabel="Szöveg"/>
                         <f:selectItem itemValue="2" itemLabel="Fájl"/>
                         <p:ajax event="change" update="codePanel, filePanel" />
                     </h:selectOneMenu>
+                    <span></span><p:message for="inputType"/>
                     <h:outputText value="Fájl:" />
                     <h:panelGroup id="filePanel">
-                        <p:fileUpload mode="simple" value="#{addSolution.file}" disabled="#{addSolution.selectedInput == 1}"/>
+                        <p:fileUpload id="file" mode="simple" value="#{addSolution.file}" disabled="#{addSolution.selectedInput == 1}" required="#{addSolution.selectedInput == 2}" requiredMessage="Kötelezõ fájlt kiválasztani!"/>
 
                     </h:panelGroup>
+                    <span></span><p:message for="file"/>
                     <h:outputText value="Programkód:" />
                     <h:panelGroup id="codePanel">
-                        <h:inputTextarea id="progCode" value="#{addSolution.solution.code}"
+                        <h:inputTextarea id="progCode" value="#{addSolution.solution.code}" required="#{addSolution.selectedInput == 1}" requiredMessage="Kötelezõ beilleszteni a program kódját!"
                                          disabled="#{addSolution.selectedInput == 2}"
                                          style="width: 510px; height: 150px; overflow-y: scroll; max-width: 510px;"/>
                     </h:panelGroup>
+                    <span></span><p:message for="progCode"/>
                     
                     Progamozási nyelv:
-                    <h:selectOneMenu value="#{addSolution.solution.language}" converter="languageConverter" style="width: 100px;">
+                    <h:selectOneMenu id="lang" value="#{addSolution.solution.language}" converter="languageConverter" style="width: 100px;">
                         <f:selectItems value="#{addSolution.languages}" var="lang" itemLabel="#{lang.name}"/>
                     </h:selectOneMenu>
+                    <span></span><p:message for="lang"/>
                     Címkék:
-                    <h:selectManyListbox value="#{addSolution.selectedCategories}" converter="categoryConverter" style="width: 200px;">
+                    <h:selectManyListbox id="cat" value="#{addSolution.selectedCategories}" converter="categoryConverter" style="width: 200px;">
                         <f:selectItems value="#{addSolution.categories}" var="cat" itemLabel="#{cat.name}"/>
                     </h:selectManyListbox>
+                    <span></span><p:message for="cat"/>
                     <p:commandButton actionListener="#{addSolution.uploadSolution()}" value="Feltöltés" ajax="false"/>
                 </h:panelGrid>    
             </p:panel>

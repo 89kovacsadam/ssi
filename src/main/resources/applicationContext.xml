@@ -5,7 +5,7 @@
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
      
     <bean id="dataSource"
-              class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
  
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://localhost:3306/ssi" />
@@ -52,6 +52,22 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
     <bean id="solutionDao"
           class="hu.unideb.studentSupportInterface.daoJdbcImpl.SolutionDaoJdbcImpl" >
         <property name="dataSource" ref="dataSource" />
+        <property name="userDao" ref="userDao" />
+        <property name="mailSender" ref="mailSender" />
+    </bean>
+    
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="587" />
+        <property name="username" value="ssi.unideb" />
+        <property name="password" value="Unid3b2014" />
+ 
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
     </bean>
         
 </beans>

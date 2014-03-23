@@ -70,6 +70,10 @@
             <property-name>languageDao</property-name>
             <value>#{languageDao}</value>
         </managed-property>
+        <managed-property>
+            <property-name>mailSender</property-name>
+            <value>#{mailSender}</value>
+        </managed-property>
     </managed-bean>
     
     <managed-bean>
@@ -109,6 +113,10 @@
         <managed-property>
             <property-name>userDao</property-name>
             <value>#{userDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>assessmentDao</property-name>
+            <value>#{assessmentDao}</value>
         </managed-property>
     </managed-bean>
     
@@ -183,6 +191,24 @@
         <managed-property>
             <property-name>categoryDao</property-name>
             <value>#{categoryDao}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>manageUsers</managed-bean-name>
+        <managed-bean-class>hu.unideb.studentSupportInterface.backing.ManageUsers</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>userDao</property-name>
+            <value>#{userDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>roleDao</property-name>
+            <value>#{roleDao}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>mailSender</property-name>
+            <value>#{mailSender}</value>
         </managed-property>
     </managed-bean>
  

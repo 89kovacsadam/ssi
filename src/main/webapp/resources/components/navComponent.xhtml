@@ -39,6 +39,9 @@ and open the template in the editor.
                     <sec:authorize ifAnyGranted="ADMIN">
                         <li class="#{view.viewId.contains('existingCategories')?'activeMenuItem':'menuItem'}"><a href="existingCategories.jsf">Címkék</a></li>
                     </sec:authorize>
+                    <sec:authorize ifAnyGranted="ADMIN">
+                        <li class="#{view.viewId.contains('manageUsers')?'activeMenuItem':'menuItem'}"><a href="manageUsers.jsf">Felhasználók kezelése</a></li>
+                    </sec:authorize>
                 </ul>
             </div>
             <h:form>

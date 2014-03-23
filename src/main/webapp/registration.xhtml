@@ -20,28 +20,40 @@ and open the template in the editor.
         <h:outputStylesheet library="css" name="style.css"  />
         <div class="container">
             <p:panel header="Regisztráció">
-            <h:form>
-                <p:messages id="msgs" globalOnly="true" />
-                <h:panelGrid columns="2" class="registrationGrid">
-                    E-mail cím: <h:inputText value="#{registration.newUser.email}" />
-                    Vezetéknév: <h:inputText value="#{registration.newUser.lastName}" />
-                    Keresztnév: <h:inputText value="#{registration.newUser.firstName}" />
-                    Jelszó: <h:inputSecret value="#{registration.newUser.password}" />
-                    Jelszó ismét: <h:inputSecret value="#{registration.pwdCheck}" />
-                    Neptun-kód: <h:inputText value="#{registration.newUser.neptunCode}" />
-                    Szeretnéd, hogy neved publikus legyen az oktatók elõtt?
-                    <h:selectBooleanCheckbox value="#{registration.newUser.isPublic}" />
-                    Milyen szerepkör(ök)ben szeretnél regisztrálni?
-                    <h:selectManyCheckbox value="#{registration.selectedRoles}" converter="roleConverter" >
-                        <f:selectItems value="#{registration.roles}" var="role" itemValue="#{role}" itemLabel="#{registration.roleLabels.get(role.role)}" />
-                    </h:selectManyCheckbox>
-                    Milyen nyelvekbõl tudsz segíteni a többieknek?
-                    <h:selectManyCheckbox value="#{registration.selectedLanguages}" converter="languageConverter" >
-                        <f:selectItems value="#{registration.languages}" var="lang" itemValue="#{lang}" itemLabel="#{lang.name}" />
-                    </h:selectManyCheckbox>
-                    <h:commandButton action="#{registration.addUser()}" value="Regisztrálok" />
-                </h:panelGrid>
-            </h:form>
+                <h:form>
+                    <p:messages id="msgs" globalOnly="true" />
+                    <h:panelGrid columns="3" class="registrationGrid">
+                        E-mail cím: <h:inputText id="email" value="#{registration.newUser.email}" required="true" requiredMessage="E-mail cím megadása kötelezõ!" />
+                        <p:message for="email"/>
+                        Vezetéknév: <h:inputText id="lname" value="#{registration.newUser.lastName}" required="#{registration.nameMandatory}" requiredMessage="A neved megadása kötelezõ!"/>
+                        <p:message for="lname"/>
+                        Keresztnév: <h:inputText id="fname" value="#{registration.newUser.firstName}" required="#{registration.nameMandatory}" requiredMessage="A neved megadása kötelezõ!"/>
+                        <p:message for="fname"/>
+                        Jelszó: <h:inputSecret id="pwd" value="#{registration.newUser.password}" required="true" requiredMessage="Jelszó megadása kötelezõ!" />
+                        <p:message for="pwd"/>
+                        Jelszó ismét: <h:inputSecret id="pwd2" value="#{registration.pwdCheck}" required="true" requiredMessage="Jelszó megadása kötelezõ!" />
+                        <p:message for="pwd2"/>
+                        Neptun-kód: <h:inputText id="ncode" value="#{registration.newUser.neptunCode}" />
+                        <p:message for="ncode"/>
+                        Szeretnéd, hogy neved publikus legyen az oktatók elõtt?
+                        <h:selectBooleanCheckbox id="public" value="#{registration.newUser.isPublic}" valueChangeListener="#{registration.changeIsPublic}" >
+                            <p:ajax event="change"/>
+                        </h:selectBooleanCheckbox>
+                        <p:message for="public"/>
+                        Milyen szerepkör(ök)ben szeretnél regisztrálni?
+                        <h:selectManyCheckbox id="roles" value="#{registration.selectedRoles}" converter="roleConverter" required="true" requiredMessage="Válassz legalább egy szerepkört" valueChangeListener="#{registration.roleChange}" >
+                            <f:selectItems value="#{registration.roles}" var="role" itemValue="#{role}" itemLabel="#{registration.roleLabels.get(role.role)}" />
+                            <p:ajax event="click" update="roles" />
+                        </h:selectManyCheckbox>
+                        <p:message for="roles"/>
+                        Milyen nyelvekbõl tudsz segíteni a többieknek?
+                        <h:selectManyCheckbox id="langs" value="#{registration.selectedLanguages}" converter="languageConverter" >
+                            <f:selectItems value="#{registration.languages}" var="lang" itemValue="#{lang}" itemLabel="#{lang.name}" />
+                        </h:selectManyCheckbox>
+                        <p:message for="langs"/>
+                        <h:commandButton action="#{registration.addUser()}" value="Regisztrálok" />
+                    </h:panelGrid>
+                </h:form>
             </p:panel>
         </div>
     </h:body>

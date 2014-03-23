@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package hu.unideb.studentSupportInterface.backing;
 
 import hu.unideb.studentSupportInterface.dao.LanguageDao;
@@ -19,13 +18,16 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 
 /**
  *
  * @author Adam
  */
-public class Registration implements Serializable{
-    
+public class Registration implements Serializable {
+
     private User newUser;
     private UserDao userDao;
     private RoleDao roleDao;
@@ -33,56 +35,97 @@ public class Registration implements Serializable{
     private List<Language> languages;
     private LanguageDao languageDao;
     private List<Role> selectedRoles;
-    private HashMap<Integer,String> roleLabels;
+    private HashMap<Integer, String> roleLabels;
     private List<Language> selectedLanguages;
     private String pwdCheck;
-    
+    private MailSender mailSender;
+
     @PostConstruct
-    public void initBean(){
+    public void initBean() {
         roles = new ArrayList<Role>();
         roles.add(Role.UPLOADER);
         roles.add(Role.ASSESSOR);
         roles.add(Role.TUTOR);
-        
+
         languages = languageDao.getAllLanguage();
         newUser = new User();
         selectedRoles = new ArrayList<Role>();
-        roleLabels = new HashMap<Integer,String>();
+        roleLabels = new HashMap<Integer, String>();
         roleLabels.put(1, "Feltöltõ");
         roleLabels.put(2, "Értékelõ");
         roleLabels.put(3, "Oktató");
     }
-    
-    public void addUser(){
-        if(userDao.loadUserByUsername(newUser.getEmail()) != null){
+
+    public void addUser() {
+        if (userDao.loadUserByUsername(newUser.getEmail()) != null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ez az e-mail cím már szerepel az adatbázisban.", "Ez az e-mail cím már szerepel az adatbázisban..."));
             return;
         }
-        
-        if(!newUser.getPassword().equals(pwdCheck)){
+
+        if (!newUser.getPassword().equals(pwdCheck)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "A két jelszó nem egyezik.", "A két jelszó nem egyezik."));
             return;
         }
-        
-        if(!selectedRoles.contains(Role.TUTOR)){
+
+        if (!selectedRoles.contains(Role.TUTOR)) {
             newUser.setActive(true);
         }
-        
-        
+
         newUser = userDao.createUser(newUser, newUser.getPassword());
-        
-        for(Role r : selectedRoles){
+
+        for (Role r : selectedRoles) {
             roleDao.addRoleToUser(newUser, r);
         }
-        
-        for(Language l : selectedLanguages){
+
+        for (Language l : selectedLanguages) {
             languageDao.addLanguageToUser(l, newUser);
         }
-        
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setFrom("SSI");
+        msg.setTo(newUser.getEmail());
+
+        String text;
+        if (selectedRoles.contains(Role.TUTOR)) {
+            text = "Kedves " + newUser.getFirstName() + "!\r\n\r\nSikeresen regisztráltál a Student Support Interface alkalmazásba!\r\nMivel oktatóként regisztráltál, felhasználói fiókod csak adminisztrátori jóváhagyás után lesz használható. Errõl egy újabb üzenetben fogsz értesülni.\r\n\r\nÜdvözlettel:\r\nStudent Support Interface";
+        } else {
+            text = "Kedves " + newUser.getFirstName() + "!\r\n\r\nSikeresen regisztráltál a Student Support Interface alkalmazásba!\r\n\r\nÜdvözlettel:\r\nStudent Support Interface";
+        }
+
+        msg.setSubject("Sikeres regisztráció");
+        msg.setText(text);
+        mailSender.send(msg);
+
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        String outcome =  "existingSolutions?faces-redirect=true";// Do your thing?
+        String outcome = "existingSolutions?faces-redirect=true";// Do your thing?
         facesContext.getApplication().getNavigationHandler().handleNavigation(facesContext, null, outcome);
+
+    }
+
+    public boolean isNameMandatory() {
+        return newUser.isIsPublic() || selectedRoles.contains(Role.TUTOR);
+    }
+
+    public void roleChange(ValueChangeEvent e) {
+        List<Role> newList = (List<Role>) e.getNewValue();
+        selectedRoles = newList;
+    }
+    
+    public boolean roleDisabled(Role role){
+        if(role == Role.UPLOADER || role == Role.ASSESSOR){
+            return selectedRoles.contains(Role.TUTOR);
+        }
         
+        if(role == Role.TUTOR){
+            return selectedRoles.contains(Role.ASSESSOR) || selectedRoles.contains(Role.UPLOADER);
+        }
+        
+        return false;
+        
+    }
+
+    public void changeIsPublic(ValueChangeEvent e) {
+        newUser.setIsPublic((Boolean) e.getNewValue());
     }
 
     public User getNewUser() {
@@ -164,7 +207,13 @@ public class Registration implements Serializable{
     public void setPwdCheck(String pwdCheck) {
         this.pwdCheck = pwdCheck;
     }
-    
-    
-    
+
+    public MailSender getMailSender() {
+        return mailSender;
+    }
+
+    public void setMailSender(MailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
 }
